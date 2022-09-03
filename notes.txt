@@ -1,0 +1,4 @@
+Points to remember from mistakes :
+
+1. CHAR vs VARCHAR - authentication was failing due to trailing spaces in the credentials due to the usage of CHAR
+2.
