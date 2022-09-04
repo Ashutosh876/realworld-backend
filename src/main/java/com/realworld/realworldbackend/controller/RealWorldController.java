@@ -2,7 +2,7 @@ package com.realworld.realworldbackend.controller;
 
 import com.realworld.realworldbackend.exception.InvalidUserException;
 import com.realworld.realworldbackend.model.AuthRequest;
-import com.realworld.realworldbackend.model.MyUserDetails;
+import com.realworld.realworldbackend.model.DTO.UserDTO;
 import com.realworld.realworldbackend.model.User;
 import com.realworld.realworldbackend.repository.UserRepository;
 import com.realworld.realworldbackend.security.MyUserDetailsService;
@@ -46,7 +46,7 @@ public class RealWorldController {
             user = userService.authenticateUser(authRequest);
             logger.info("User : {} Authenticated!!", user.getUsername());
             user = userService.allotJWT(user);
-            return new ResponseEntity<>(user, HttpStatus.ACCEPTED);
+            return new ResponseEntity<>(new UserDTO(user), HttpStatus.ACCEPTED);
         } catch (BadCredentialsException e) {
             return ResponseEntity.ok(e);
         }
@@ -57,21 +57,21 @@ public class RealWorldController {
     public ResponseEntity<?> registerUser(@RequestBody AuthRequest authRequest) {
         try {
             User user = userService.registerUser(authRequest);
-            return new ResponseEntity<>(user, HttpStatus.ACCEPTED);
+            return new ResponseEntity<>(new UserDTO(user), HttpStatus.ACCEPTED);
         } catch (InvalidUserException e) {
             return ResponseEntity.ok(e);
         }
     }
 
     @GetMapping("/user")
-    public User getCurrentUser() {
-        return userService.getCurrentUser();
+    public UserDTO getCurrentUser() {
+        return new UserDTO(userService.getCurrentUser());
     }
 
     @PutMapping("/user")
     public ResponseEntity<?> updateUser(@RequestBody AuthRequest authRequest) {
         User user = userService.updateUser(authRequest);
-        return new ResponseEntity<>(user, HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(new UserDTO(user), HttpStatus.ACCEPTED);
     }
 
     @GetMapping("register")

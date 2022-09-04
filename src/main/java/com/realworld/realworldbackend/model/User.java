@@ -1,5 +1,6 @@
 package com.realworld.realworldbackend.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 import javax.persistence.*;
@@ -7,6 +8,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "user_table")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class User {
 
     @Id

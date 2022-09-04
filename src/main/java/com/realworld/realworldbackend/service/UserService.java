@@ -44,7 +44,7 @@ public class UserService {
             logger.info("Incorrect login credentials entered!! Please Check.");
             throw new BadCredentialsException("Incorrect login credentials entered!! Please Check.");
         }
-        return user;
+        return userRepository.findByEmail(user.getEmail()).get();
     }
 
     public User allotJWT(User user) {
@@ -67,6 +67,7 @@ public class UserService {
     }
 
     private boolean validateUser(User user) {
+        //TODO
         //validation
         return true;
     }
