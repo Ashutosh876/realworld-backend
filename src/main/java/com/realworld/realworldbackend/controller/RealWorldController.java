@@ -2,10 +2,12 @@ package com.realworld.realworldbackend.controller;
 
 import com.realworld.realworldbackend.exception.InvalidUserException;
 import com.realworld.realworldbackend.model.AuthRequest;
+import com.realworld.realworldbackend.model.DTO.ProfileDTO;
 import com.realworld.realworldbackend.model.DTO.UserDTO;
-import com.realworld.realworldbackend.model.User;
+import com.realworld.realworldbackend.model.entity.UserEntity;
 import com.realworld.realworldbackend.repository.UserRepository;
 import com.realworld.realworldbackend.security.MyUserDetailsService;
+import com.realworld.realworldbackend.service.ProfileService;
 import com.realworld.realworldbackend.service.UserService;
 import com.realworld.realworldbackend.util.JwtUtil;
 import org.slf4j.Logger;
@@ -41,12 +43,12 @@ public class RealWorldController {
     @PostMapping(value = "api/users/login", headers="Accept=application/json")
     public ResponseEntity<?> loginUser(@RequestBody AuthRequest authRequest) throws Exception {
         logger.info("START : Logging in user");
-        User user;
+        UserEntity userEntity;
         try {
-            user = userService.authenticateUser(authRequest);
-            logger.info("User : {} Authenticated!!", user.getUsername());
-            user = userService.allotJWT(user);
-            return new ResponseEntity<>(new UserDTO(user), HttpStatus.ACCEPTED);
+            userEntity = userService.authenticateUser(authRequest);
+            logger.info("User : {} Authenticated!!", userEntity.getUsername());
+            userEntity = userService.allotJWT(userEntity);
+            return new ResponseEntity<>(new UserDTO(userEntity), HttpStatus.ACCEPTED);
         } catch (BadCredentialsException e) {
             return ResponseEntity.ok(e);
         }
@@ -56,8 +58,8 @@ public class RealWorldController {
     @PostMapping(value = "api/users/register", headers="Accept=application/json")
     public ResponseEntity<?> registerUser(@RequestBody AuthRequest authRequest) {
         try {
-            User user = userService.registerUser(authRequest);
-            return new ResponseEntity<>(new UserDTO(user), HttpStatus.ACCEPTED);
+            UserEntity userEntity = userService.registerUser(authRequest);
+            return new ResponseEntity<>(new UserDTO(userEntity), HttpStatus.ACCEPTED);
         } catch (InvalidUserException e) {
             return ResponseEntity.ok(e);
         }
@@ -70,13 +72,34 @@ public class RealWorldController {
 
     @PutMapping("/user")
     public ResponseEntity<?> updateUser(@RequestBody AuthRequest authRequest) {
-        User user = userService.updateUser(authRequest);
-        return new ResponseEntity<>(new UserDTO(user), HttpStatus.ACCEPTED);
+        UserEntity userEntity = userService.updateUser(authRequest);
+        return new ResponseEntity<>(new UserDTO(userEntity), HttpStatus.ACCEPTED);
     }
 
     @GetMapping("register")
     public String test() {
         return "register";
+    }
+
+    @Autowired
+    private ProfileService profileService;
+
+    @GetMapping(value = "/api/profiles/{username}")
+    public ProfileDTO getProfile(@PathVariable("username") String username) {
+
+        return profileService.getProfile(username);
+    }
+
+    @PostMapping(value = "/api/profiles/{username}/follow")
+    public void followUser(@PathVariable("username") String username) {
+
+        profileService.followUser(username);
+    }
+
+    @PostMapping(value = "/api/profiles/{username}/unfollow")
+    public void unfollowUser(@PathVariable("username") String username) {
+
+        profileService.unfollowUser(username);
     }
 
 }

@@ -1,20 +1,22 @@
 package com.realworld.realworldbackend.model;
 
+import com.realworld.realworldbackend.model.entity.UserEntity;
+
 public class AuthRequest {
 
-    private User user;
+    private UserEntity userEntity;
 
     public AuthRequest() {}
 
-    public AuthRequest(User user) {
-        this.user = user;
+    public AuthRequest(UserEntity userEntity) {
+        this.userEntity = userEntity;
     }
 
-    public User getUser() {
-        return user;
+    public UserEntity getUser() {
+        return userEntity;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUser(UserEntity userEntity) {
+        this.userEntity = userEntity;
     }
 }

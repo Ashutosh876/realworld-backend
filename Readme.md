@@ -1,13 +1,13 @@
-user creates an account.
-user writes articles.
-user deletes an article.
+userEntity creates an account.
+userEntity writes articles.
+userEntity deletes an article.
 updates an article.
-user follows other users.
-user is followed by other users.
-user likes an article.
-user views an article.
-user comments on an article.
-user views global feed.
-user views his feed.
+userEntity follows other users.
+userEntity is followed by other users.
+userEntity likes an article.
+userEntity views an article.
+userEntity comments on an article.
+userEntity views global feed.
+userEntity views his feed.
 
 APIs - 

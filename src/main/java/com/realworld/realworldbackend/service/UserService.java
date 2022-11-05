@@ -3,7 +3,7 @@ package com.realworld.realworldbackend.service;
 import com.realworld.realworldbackend.exception.InvalidUserException;
 import com.realworld.realworldbackend.model.AuthRequest;
 import com.realworld.realworldbackend.model.MyUserDetails;
-import com.realworld.realworldbackend.model.User;
+import com.realworld.realworldbackend.model.entity.UserEntity;
 import com.realworld.realworldbackend.repository.UserRepository;
 import com.realworld.realworldbackend.security.MyUserDetailsService;
 import com.realworld.realworldbackend.util.JwtUtil;
@@ -35,58 +35,58 @@ public class UserService {
 
     final Logger logger = LoggerFactory.getLogger(UserService.class);
 
-    public User authenticateUser(AuthRequest authRequest) {
-        User user = authRequest.getUser();
+    public UserEntity authenticateUser(AuthRequest authRequest) {
+        UserEntity userEntity = authRequest.getUser();
         try {
             authenticationManager.authenticate
-                    (new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword()));
+                    (new UsernamePasswordAuthenticationToken(userEntity.getEmail(), userEntity.getPassword()));
         } catch (BadCredentialsException e) {
             logger.info("Incorrect login credentials entered!! Please Check.");
             throw new BadCredentialsException("Incorrect login credentials entered!! Please Check.");
         }
-        return userRepository.findByEmail(user.getEmail()).get();
+        return userRepository.findByEmail(userEntity.getEmail()).get();
     }
 
-    public User allotJWT(User user) {
-        final MyUserDetails userDetails = (MyUserDetails) myUserDetailsService.loadUserByUsername(user.getEmail());
+    public UserEntity allotJWT(UserEntity userEntity) {
+        final MyUserDetails userDetails = (MyUserDetails) myUserDetailsService.loadUserByUsername(userEntity.getEmail());
         final String jwt = jwtUtil.generateToken(userDetails);
-        user.setToken(jwt);
-        return user;
+        userEntity.setToken(jwt);
+        return userEntity;
     }
 
-    public User registerUser(AuthRequest authRequest) throws InvalidUserException {
+    public UserEntity registerUser(AuthRequest authRequest) throws InvalidUserException {
         //you can check if the username already exists, can check if the password is not strong, can check if the email id is not valid
         //ignoring that as of now
-        User user = authRequest.getUser();
-        if(validateUser(user)) {
-            userRepository.save(user);
-            return user;
+        UserEntity userEntity = authRequest.getUser();
+        if(validateUser(userEntity)) {
+            userRepository.save(userEntity);
+            return userEntity;
         } else {
             throw new InvalidUserException("User is invalid!! Please check.");
         }
     }
 
-    private boolean validateUser(User user) {
+    private boolean validateUser(UserEntity userEntity) {
         //TODO
         //validation
         return true;
     }
 
-    public User getCurrentUser() {
+    public UserEntity getCurrentUser() {
         MyUserDetails myUserDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Optional<User> user = userRepository.findByEmail(myUserDetails.getEmail());
+        Optional<UserEntity> user = userRepository.findByEmail(myUserDetails.getEmail());
         return user.get();
     }
 
-    public User updateUser(AuthRequest authRequest) {
-        User user = getCurrentUser();
-        if(null != authRequest.getUser().getPassword()) user.setPassword(authRequest.getUser().getPassword());
-        if(null != authRequest.getUser().getEmail()) user.setEmail(authRequest.getUser().getEmail());
-        if(null != authRequest.getUser().getUsername()) user.setUsername(authRequest.getUser().getUsername());
-        if(null != authRequest.getUser().getBio()) user.setBio(authRequest.getUser().getBio());
-        if(null != authRequest.getUser().getImage()) user.setImage(authRequest.getUser().getImage());
+    public UserEntity updateUser(AuthRequest authRequest) {
+        UserEntity userEntity = getCurrentUser();
+        if(null != authRequest.getUser().getPassword()) userEntity.setPassword(authRequest.getUser().getPassword());
+        if(null != authRequest.getUser().getEmail()) userEntity.setEmail(authRequest.getUser().getEmail());
+        if(null != authRequest.getUser().getUsername()) userEntity.setUsername(authRequest.getUser().getUsername());
+        if(null != authRequest.getUser().getBio()) userEntity.setBio(authRequest.getUser().getBio());
+        if(null != authRequest.getUser().getImage()) userEntity.setImage(authRequest.getUser().getImage());
 
-        userRepository.save(user);
-        return user;
+        userRepository.save(userEntity);
+        return userEntity;
     }
 }

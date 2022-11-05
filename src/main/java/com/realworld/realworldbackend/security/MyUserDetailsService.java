@@ -1,7 +1,7 @@
 package com.realworld.realworldbackend.security;
 
 import com.realworld.realworldbackend.model.MyUserDetails;
-import com.realworld.realworldbackend.model.User;
+import com.realworld.realworldbackend.model.entity.UserEntity;
 import com.realworld.realworldbackend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,7 +20,7 @@ public class MyUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
-        Optional<User> user = userRepository.findByEmail(email);
+        Optional<UserEntity> user = userRepository.findByEmail(email);
 
         user.orElseThrow(() -> new UsernameNotFoundException("User not found!! " + email));
 

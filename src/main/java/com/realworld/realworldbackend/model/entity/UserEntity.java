@@ -1,4 +1,4 @@
-package com.realworld.realworldbackend.model;
+package com.realworld.realworldbackend.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import org.hibernate.annotations.GenericGenerator;
@@ -9,7 +9,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "user_table")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class User {
+public class UserEntity {
 
     @Id
     @GeneratedValue(generator = "UUID")
