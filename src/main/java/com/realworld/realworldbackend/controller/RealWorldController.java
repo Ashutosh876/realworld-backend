@@ -19,7 +19,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.*;
 
-@RestController("/")
+@RestController
+@RequestMapping(value = "/")
 public class RealWorldController {
 
     @Autowired
@@ -79,27 +80,6 @@ public class RealWorldController {
     @GetMapping("register")
     public String test() {
         return "register";
-    }
-
-    @Autowired
-    private ProfileService profileService;
-
-    @GetMapping(value = "/api/profiles/{username}")
-    public ProfileDTO getProfile(@PathVariable("username") String username) {
-
-        return profileService.getProfile(username);
-    }
-
-    @PostMapping(value = "/api/profiles/{username}/follow")
-    public void followUser(@PathVariable("username") String username) {
-
-        profileService.followUser(username);
-    }
-
-    @PostMapping(value = "/api/profiles/{username}/unfollow")
-    public void unfollowUser(@PathVariable("username") String username) {
-
-        profileService.unfollowUser(username);
     }
 
 }

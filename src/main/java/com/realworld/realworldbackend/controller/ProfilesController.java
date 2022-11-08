@@ -3,12 +3,10 @@ package com.realworld.realworldbackend.controller;
 import com.realworld.realworldbackend.model.DTO.ProfileDTO;
 import com.realworld.realworldbackend.service.ProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-//@RestController(value = "/api/profiles")
+@RestController
+@RequestMapping(value = "/api/profiles")
 public class ProfilesController {
 
     @Autowired
